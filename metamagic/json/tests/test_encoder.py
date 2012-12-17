@@ -229,7 +229,7 @@ class _BaseJsonEncoderTest:
 
     def test_utils_json_encoder_custom_methods(self):
         class FooJson:
-            def __sx_json__(self):
+            def __mm_json__(self):
                 return '{"foo":{"baz":"©","spam":"\x1b"}}'
 
         # none of these are suported by std encoder
@@ -238,7 +238,7 @@ class _BaseJsonEncoderTest:
         self.encoder_test({'bar':FooJson()}, '{"bar":' + ex_result + '}', False, False)
 
         class FooJsonb:
-            def __sx_json__(self):
+            def __mm_json__(self):
                 return b'"foo"'
 
         # none of these are suported by std encoder
@@ -246,10 +246,10 @@ class _BaseJsonEncoderTest:
         self.encoder_test({'bar':FooJsonb()}, '{"bar":"foo"}', False, False)
 
         class FooJsonPlus:
-            def __sx_json__(self):
+            def __mm_json__(self):
                 raise NotImplementedError
 
-            def __sx_serialize__(self):
+            def __mm_serialize__(self):
                 return 'foo'
 
         # none of these are suported by std encoder
@@ -257,7 +257,7 @@ class _BaseJsonEncoderTest:
         self.encoder_test({'bar':FooJsonPlus()}, '{"bar":"foo"}', False, False)
 
         class Foo:
-            def __sx_serialize__(self):
+            def __mm_serialize__(self):
                 return 'foo'
 
         # none of these are suported by std encoder
@@ -266,7 +266,7 @@ class _BaseJsonEncoderTest:
         self.encoder_test({'bar':Foo()}, '{"bar":"foo"}', False, False)
 
         class FooNotImpl(str):
-            def __sx_serialize__(self):
+            def __mm_serialize__(self):
                 raise NotImplementedError
 
         # none of these are suported by std encoder
@@ -275,7 +275,7 @@ class _BaseJsonEncoderTest:
         self.encoder_test({'bar':FooNotImpl('foo')}, '{"bar":"foo"}', False, False)
 
         class Spam:
-            def __sx_serialize__(self):
+            def __mm_serialize__(self):
                 1/0
 
         with assert_raises(ZeroDivisionError):

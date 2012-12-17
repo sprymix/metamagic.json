@@ -46,7 +46,7 @@ Completely eqivalent to the semantix.utils.json.encoder.Encoder class:\n\
    False, None, list, tuple, dict, set, frozenset, collections.OrderedDict, \
    colections.Set, collections.Sequence, collections.Mapping, \
    uuid.UUID, decimal.Decimal, datetime.datetime and derived classes)\n\
- - supports __sx_serialize__() and encode_hook() methods, when available\n\
+ - supports __mm_serialize__() and encode_hook() methods, when available\n\
  - raises the same set of exceptions under the same conditions");
 
 // see http://docs.python.org/release/3.2.1/extending/newtypes.html
@@ -154,7 +154,7 @@ static void encode (PyObject *obj, EncodedData * encodedData);
  * The first argument is the object to be JSON-encoded; the second is optional
  * integer parameter specifying max allowed recursion depth (default: 100).
  *
- * Supports optional __sx_json__() and __sx_serialize__() methods and calls
+ * Supports optional __mm_json__() and __mm_serialize__() methods and calls
  * self.default() as the last resort for all objects that could not be encoded
  * in any other way.
  *
@@ -196,7 +196,7 @@ encoder_dumps (PyObject *self, PyObject *args, PyObject *kwargs)
  * The first argument is the object to be JSON-encoded; the second is optional
  * integer parameter specifying max allowed recursion depth (default: 100).
  *
- * Supports optional __sx_json__() and __sx_serialize__() methods and calls
+ * Supports optional __mm_json__() and __mm_serialize__() methods and calls
  * self.default() as the last resort for all objects that could not be encoded
  * in any other way.
  *
@@ -299,11 +299,11 @@ static void encode_none    (EncodedData * encodedData);
  *     list/tuple/dict/set, OrderedDict, UUID and Decimal) is performed and if type matches
  *     the corresponding encoder is used and the result stored in EncodedData buffer.
  *
- *  3) next, the object's __sx_json__() method is tried and if exists and does not raise
+ *  3) next, the object's __mm_json__() method is tried and if exists and does not raise
  *     NotImplementedError, its return value is used.
  *
- *  4) next, the object's __sx_serialize__() method is tried and this function is applied
- *     to the output of __sx_serialize__.
+ *  4) next, the object's __mm_serialize__() method is tried and this function is applied
+ *     to the output of __mm_serialize__.
  *
  *  5) If none of the baove worked, the more generic isinstance() check is performed
  *     against the same known object types.
@@ -366,9 +366,9 @@ static void _encode (PyObject * obj, EncodedData * encodedData)
     if (obj->ob_type == PyType_Decimal)         return encode_decimal (obj, encodedData);
     if (obj->ob_type == PyType_Col_OrderedDict) return encode_mapping (obj, encodedData);
 
-    // try __sx_json__ method ----------------------------------------------
+    // try __mm_json__ method ----------------------------------------------
 
-    PyObject* _sx_json_ = PyObject_GetAttrString(obj, "__sx_json__");
+    PyObject* _sx_json_ = PyObject_GetAttrString(obj, "__mm_json__");
 
     if (_sx_json_ != NULL)
     {
@@ -402,9 +402,9 @@ static void _encode (PyObject * obj, EncodedData * encodedData)
     else
         PyErr_Clear();
 
-    // try __sx_serialize__ method -----------------------------------------
+    // try __mm_serialize__ method -----------------------------------------
 
-    PyObject* _sx_serialize_ = PyObject_GetAttrString(obj, "__sx_serialize__");
+    PyObject* _sx_serialize_ = PyObject_GetAttrString(obj, "__mm_serialize__");
 
     if (_sx_serialize_ != NULL)
     {
@@ -477,7 +477,7 @@ static void _encode (PyObject * obj, EncodedData * encodedData)
  * key in the semantix framework.
  *
  * The order in which different checks/encoders are applied is the same as in the
- * encode() method; __sx_serialize__() is also supported and is supposed to return
+ * encode() method; __mm_serialize__() is also supported and is supposed to return
  * an object encodable to a string. If everything else fails the default() method
  * is called.
  */
@@ -491,9 +491,9 @@ static void encode_key (PyObject *obj, EncodedData * encodedData)
     if (PyUnicode_CheckExact(obj))   return encode_string (obj, encodedData);
     if (obj->ob_type == PyType_UUID) return encode_uuid   (obj, encodedData);
 
-    // try __sx_serialize__ method -----------------------------------------
+    // try __mm_serialize__ method -----------------------------------------
 
-    PyObject* _sx_serialize_ = PyObject_GetAttrString(obj, "__sx_serialize__");
+    PyObject* _sx_serialize_ = PyObject_GetAttrString(obj, "__mm_serialize__");
 
     if (_sx_serialize_ != NULL)
     {

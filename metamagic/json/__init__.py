@@ -33,12 +33,12 @@ def dumps(obj, encoder=Encoder):
            >>> dumps('foo')
            '"foo"'
 
-       Using custom ``__sx_serialize__`` (see the Encoder class docs for more info):
+       Using custom ``__mm_serialize__`` (see the Encoder class docs for more info):
 
        .. code-block:: pycon
 
            >>> class Foo:
-           ...     def __sx_serialize__(self):
+           ...     def __mm_serialize__(self):
            ...         return 'foo/bar'
 
            >>> dumps(Foo())

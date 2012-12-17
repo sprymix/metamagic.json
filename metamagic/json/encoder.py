@@ -51,11 +51,11 @@ class Encoder:
        Note: encode_hook() should always return an object; for objects which should not be
        specially encoded encode_hook() should return the original object.
 
-       Supports custom encoders by using objects' ``__sx_json__()`` or ``__sx_serialize__()``
-       method, if available. It is guaranteed that for all non-native types __sx_json__ and
-       then __sx_serialize__ will be tried before any other attempt to encode the object [#f2]_.
-       The output of __sx_serialize__ is in turn encoded as any other object (and may in turn have
-       an __sx_serialize__ method or not be supported).
+       Supports custom encoders by using objects' ``__mm_json__()`` or ``__mm_serialize__()``
+       method, if available. It is guaranteed that for all non-native types __mm_json__ and
+       then __mm_serialize__ will be tried before any other attempt to encode the object [#f2]_.
+       The output of __mm_serialize__ is in turn encoded as any other object (and may in turn have
+       an __mm_serialize__ method or not be supported).
 
        Natively supports strings, integers, floats, True, False, None, lists, tuples,
        dicts, sets, frozensets, collections.OrderedDicts, colections.Set,
@@ -72,7 +72,7 @@ class Encoder:
 
        * Both ``dumps()`` and ``dumpb()`` raise a TypeError for unsupported objects and
          for all dictionary keys which are not strings (or UUIDs [#f5]_) and
-         which are not representable as strings (or UUIDs) by their __sx_serialize__ method.
+         which are not representable as strings (or UUIDs) by their __mm_serialize__ method.
 
        * ``default()`` raises a TypeError for all unsupported objects, and overwritten ``default()``
          is also expected to raise a TypeError for all objects it does not support.
@@ -91,7 +91,7 @@ class Encoder:
        .. [#f3] To avoid errors in the semantix framework ``bytes()``, ``bytearray()`` and derived
                 classes are deliberately not encoded using the built-in sequence encoder;
                 the only way to encode these objects is to either overwrite the encoders' default()
-                method or to provide __sx_serialize__ method in the object being serialized.
+                method or to provide __mm_serialize__ method in the object being serialized.
        .. [#f4] UUIDs and Decimals are encoded as strings.
        .. [#f5] JSON specification only supports string dictionary keys; since UUIDs
                 are also encoded to strings and are a common key in the semantix framework,
@@ -248,9 +248,9 @@ class Encoder:
         if obj.__class__ is UUID:
             return '"' + str(obj) + '"'
 
-        # __sx_serialize__ is called before any isinstance checks (but after exact type checks)
+        # __mm_serialize__ is called before any isinstance checks (but after exact type checks)
         try:
-            sx_encoder = obj.__sx_serialize__
+            sx_encoder = obj.__mm_serialize__
         except AttributeError:
             pass
         else:
@@ -315,11 +315,11 @@ class Encoder:
         if _objtype is Decimal:
             return '"' + str(obj) + '"'
 
-        # For all non-std types try __sx_json__ and then __sx_serialize__ before any isinstance
+        # For all non-std types try __mm_json__ and then __mm_serialize__ before any isinstance
         # checks
 
         try:
-            sx_json_data = obj.__sx_json__
+            sx_json_data = obj.__mm_json__
         except AttributeError:
             pass
         else:
@@ -333,7 +333,7 @@ class Encoder:
                 else:
                     return self._encode_str(data, escape_quotes=False)
         try:
-            sx_encoder = obj.__sx_serialize__
+            sx_encoder = obj.__mm_serialize__
         except AttributeError:
             pass
         else:
