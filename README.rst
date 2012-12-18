@@ -159,6 +159,12 @@ Benchmarks
        marshal:  1.02776 sec,         48 req/sec
 
 
+Tests
+-----
+
+``pytest`` is required to run tests.
+
+
 .. [#f1] All characters required to be escaped by the JSON spec @ http://json.org are escaped
 .. [#f2] If present, encode_hook() is applied before and independently of all other encoders
 .. [#f3] To avoid errors in the metamagic framework ``bytes()``, ``bytearray()`` and derived
