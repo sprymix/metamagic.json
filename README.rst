@@ -25,9 +25,12 @@ collections.Sequence [#f3]_, collections.Mapping, uuid.UUIDs [#f4]_, decimal.Dec
 datetime.datetime and objects derived form all listed objects.
 
 For all objects which could not be encoded in any other way an
-attempt is made to convert an object to an encodeable one using ``self.default(obj)``
-method (which can be overwrite in derived classes). If self.default succeeds,
-the output is again encoded as any other object.
+attempt is made to convert an object to an encodeable one using ``Encoder.default(obj)``
+method. If ``Encoder.default`` succeeds, the output is again encoded as any other object.
+
+In case there is a need to custom-handle natively supported primitive types, an
+``Encoder.encode_hook`` method exists.
+
 
 **Python 3.3 only!**
 
