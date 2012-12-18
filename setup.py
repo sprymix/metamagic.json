@@ -6,7 +6,12 @@
 ##
 
 
+import sys
 from distutils.core import setup, Extension
+
+
+if sys.version_info < (3, 0):
+    raise RuntimeError('metamagic.json requires python 3')
 
 
 readme = open('README.rst').read()

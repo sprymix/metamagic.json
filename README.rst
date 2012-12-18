@@ -29,8 +29,11 @@ attempt is made to convert an object to an encodeable one using ``self.default(o
 method (which can be overwrite in derived classes). If self.default succeeds,
 the output is again encoded as any other object.
 
+**Python 3 only!**
 
-Exceptions raised:
+
+Exceptions raised
+-----------------
 
 * Both ``dumps()`` and ``dumpb()`` raise a TypeError for unsupported objects and
   for all dictionary keys which are not strings (or UUIDs [#f5]_) and
