@@ -7,7 +7,7 @@
 
 
 import sys
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 
 if sys.version_info[:2] < (3, 3):
@@ -24,8 +24,10 @@ setup(
     long_description=readme,
     maintainer='Sprymix Inc.',
     maintainer_email='info@sprymix.com',
+    license='BSD',
     url='http://github.com/sprymix/metamagic.json',
     platforms=['any'],
+    keywords='json',
     ext_modules=[
         Extension('metamagic.json._encoder',
                   sources=['metamagic/json/_encoder/_encoder.c'],
@@ -37,7 +39,8 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: C',
-        'Programming Language :: Python :: 3'
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3'
     ],
     packages=[
         'metamagic.json',
@@ -46,5 +49,6 @@ setup(
     ],
     package_data = {
         'metamagic.json._encoder': ['*.c', '*.h']
-    }
+    },
+    include_package_data=True
 )
