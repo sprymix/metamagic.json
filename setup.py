@@ -24,7 +24,7 @@ setup(
     long_description=readme,
     maintainer='Sprymix Inc.',
     maintainer_email='info@sprymix.com',
-    url='http://sprymix.com',
+    url='http://github.com/sprymix/metamagic.json',
     platforms=['any'],
     ext_modules=[
         Extension('metamagic.json._encoder',
