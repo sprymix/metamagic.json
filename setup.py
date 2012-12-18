@@ -47,8 +47,5 @@ setup(
         'metamagic.json._encoder',
         'metamagic.json.tests'
     ],
-    package_data = {
-        'metamagic.json._encoder': ['*.c', '*.h']
-    },
     include_package_data=True
 )

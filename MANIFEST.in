@@ -1,0 +1,7 @@
+include MANIFEST.in LICENSE README.rst
+include metamagic/json/_encoder/_encoder.c
+include metamagic/json/_encoder/_encoder.h
+include metamagic/json/_encoder/_encoder_buffer.c
+include metamagic/json/_encoder/_encoder_buffer.h
+include metamagic/json/_encoder/_encoder_stringify.c
+include metamagic/json/_encoder/_encoder_stringify.h
