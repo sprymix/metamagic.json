@@ -6,8 +6,8 @@
 ##
 
 
-from semantix.utils.json._encoder import Encoder as CEncoder
-from semantix.utils.json.encoder import Encoder as PyEncoder
+from metamagic.json._encoder import Encoder as CEncoder
+from metamagic.json.encoder import Encoder as PyEncoder
 
 from json import dumps as std_dumps
 import time
@@ -51,7 +51,7 @@ class JsonBenchmark:
                 PyEncoder().dumps(obj)
             tend = time.clock()
             tsec = round(tend-tstart,5)
-            print ("   my json: ", repr(tsec).rjust(7), "sec,   ", \
+            print ("   mm json: ", repr(tsec).rjust(7), "sec,   ", \
                    repr(int(num_loops/tsec)).rjust(7), "req/sec")
 
         if self.test_c:
@@ -61,7 +61,7 @@ class JsonBenchmark:
             tend = time.clock()
             tsec = round(tend-tstart,5)
             ratio = round(tsecbase/tsec,1)
-            print (" my c json: ", repr(tsec).rjust(7), "sec,   ", \
+            print (" mm c json: ", repr(tsec).rjust(7), "sec,   ", \
                    repr(int(num_loops/tsec)).rjust(7), "req/sec  ( " + repr(ratio) + "x )")
 
             tstart = time.clock()
@@ -71,7 +71,7 @@ class JsonBenchmark:
             tend = time.clock()
             tsec = round(tend-tstart,5)
             ratio = round(tsecbase/tsec,1)
-            print (" my c 1ini: ", repr(tsec).rjust(7), "sec,   ", \
+            print (" mm c 1ini: ", repr(tsec).rjust(7), "sec,   ", \
                    repr(int(num_loops/tsec)).rjust(7), "req/sec  ( " + repr(ratio) + "x )")
 
         if self.test_c_binary:
@@ -81,7 +81,7 @@ class JsonBenchmark:
             tend = time.clock()
             tsec = round(tend-tstart,5)
             ratio = round(tsecbase/tsec,1)
-            print ("my c dumpb: ", repr(tsec).rjust(7), "sec,   ", \
+            print ("mm c dumpb: ", repr(tsec).rjust(7), "sec,   ", \
                    repr(int(num_loops/tsec)).rjust(7), "req/sec  ( " + repr(ratio) + "x )")
 
         if self.test_marshal:
@@ -137,7 +137,7 @@ class JsonBenchmark:
         print ("Array with 256 long utf-8 strings:")
         testObject3 = []
         for _ in range(256):
-            testObject3.append("نظام الحكم سلطاني وراثي في الذكور من ذرية السيد تركي بن سعيد بن سلطان ويشترط فيمن يختار لولاية الحكم من بينهم ان يكون مسلما رشيدا عاقلا ًوابنا شرعيا لابوين عمانيين ")
+            testObject3.append("عالم " * 50)
 
         assert std_dumps(testObject3, separators=(',',':')) == PyEncoder().dumps(testObject3)
         assert std_dumps(testObject3, separators=(',',':')) == CEncoder().dumps(testObject3)
@@ -249,7 +249,7 @@ class JsonBenchmark:
         self.timing_test(testObject8, 50)
 
 
-def main(*, c=True, python=False, marshal=False, test_c_binary=False):
+def main(*, c=True, python=False, marshal=True, test_c_binary=True):
     JsonBenchmark(c, python, marshal, test_c_binary).run()
 
 

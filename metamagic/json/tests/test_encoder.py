@@ -7,6 +7,7 @@
 
 
 import py.test
+
 from json import loads as std_loads, dumps as std_dumps
 from decimal import Decimal
 from collections import OrderedDict, Set, Sequence, Mapping
@@ -14,7 +15,7 @@ from uuid import UUID
 import random
 from datetime import datetime, tzinfo, timedelta, date, time
 
-from semantix.utils.debug import assert_raises
+from metamagic.utils.debug import assert_raises
 
 
 class _BaseJsonEncoderTest:
@@ -75,7 +76,7 @@ class _BaseJsonEncoderTest:
         # once a bug was introduced in the c version which passed all other tests but not
         # this one (for characted \u0638) - so need to keep this long UTF string as a
         # "more complicated" utf sample
-        long_utf_string = "نظام الحكم سلطاني وراثي في الذكور من ذرية السيد تركي بن سعيد بن سلطان ويشترط فيمن يختار لولاية الحكم من بينهم ان يكون مسلما رشيدا عاقلا ًوابنا شرعيا لابوين عمانيين "
+        long_utf_string = "عالم " * 50
         assert std_dumps(long_utf_string, separators=(',',':')) == self.dumps(long_utf_string)
 
     def test_utils_json_encoder_numbers(self):
@@ -102,6 +103,10 @@ class _BaseJsonEncoderTest:
         # std module does not support Decimals
         # note: Decimal(1.17) != Decimal("1.17"), for testing need initialization from a string
         self.encoder_test(Decimal("1.17"), '"1.17"', False, False)
+
+        lst = [Decimal(str(random.random()*100000)) for _ in range(256)]
+        out = '[{}]'.format(','.join('"{}"'.format(str(d)) for d in lst))
+        self.encoder_test(lst, out, False, False)
 
         # complex numbers are not JSON serializable
         with assert_raises(TypeError, error_re='not JSON serializable'):
@@ -409,7 +414,7 @@ class TestCJsonEncoder(_BaseJsonEncoderTest):
 
 def test_utils_json_dump():
     #test bindings
-    from semantix.utils.json import dumps, dumpb
+    from metamagic.json import dumps, dumpb
 
     assert dumps(True) == 'true'
     assert dumpb(True) == b'true'
