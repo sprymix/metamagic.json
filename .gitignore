@@ -2,4 +2,5 @@
 *.pyo
 __pycache__/
 build/
+*.so
 
