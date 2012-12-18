@@ -32,6 +32,43 @@ the output is again encoded as any other object.
 **Python 3.3 only!**
 
 
+Examples
+--------
+
+Encoding custom objects::
+
+    >>> from metamagic.json import dumps, dumpb
+
+    >>> class Foo:
+    ...     def __mm_serialize__(self):
+    ...         return "Im foo"
+    ...
+
+    >>> dumps(Foo())
+    '"Im foo"'
+
+    >>> dumps({Foo(): 123})
+    '{"Im foo":123}'
+
+Dumping straight to bytes::
+
+    >>> dumpb(Foo())
+    b'"Im foo"'
+
+Bypassing serialization for JSON buffers::
+
+    >>> class JSONData:
+    ...     def __init__(self, data):
+    ...         self.data = data
+    ...
+    ...     def __mm_json__(self):
+    ...         return self.data
+
+    >>> a = JSONData('["abc", "def"]')
+    >>> dumps([1,2,3,a])
+    '[1,2,3,["abc", "def"]]'
+
+
 Exceptions raised
 -----------------
 
