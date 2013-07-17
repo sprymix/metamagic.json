@@ -27,22 +27,24 @@ class _BaseJsonEncoderTest:
         obj.dumpb = lambda *args, **kwargs: cls.encoder().dumpb(*args, **kwargs)
         return obj
 
-    def encoder_test(self, obj, encoded, convertable_back = True, matches_default_encoder = True):
+    def encoder_test(self, obj, expected, convertable_back = True, matches_default_encoder = True):
         """Tests that our dumps behaves exactly like the default json module
         Should not be used for cases where we don't like the default module behavior
         """
-        if encoded is None:
-            encoded = encoded_b = {None}
+        if expected is None:
+            expected = expected_b = {None}
         else:
-            if isinstance(encoded, str):
-                encoded = {encoded}
+            if isinstance(expected, str):
+                expected = {expected}
             else:
-                encoded = set(encoded)
+                expected = set(expected)
 
-        assert self.dumps(obj) in encoded
+        encoded = self.dumps(obj)
+        assert encoded in expected
 
-        encoded_b = {e.encode('ascii') for e in encoded}
-        assert self.dumpb(obj) in encoded_b
+        expected_b = {e.encode('ascii') for e in expected}
+        encoded_b = self.dumpb(obj)
+        assert encoded_b in expected_b
 
         if convertable_back:
             # test decode: not always possible, e.g. for Decimals or integers larger than Java-max
@@ -50,7 +52,7 @@ class _BaseJsonEncoderTest:
 
         if matches_default_encoder:
             # test compliance with standard encoder; use compact encoding (set
-            #  separators) - ow lists are encoded with extra spaces between items
+            #  separators) - ow lists are expected with extra spaces between items
             assert std_dumps(obj, separators=(',',':')) == self.dumps(obj)
 
     def test_utils_json_encoder_literals(self):
@@ -72,6 +74,10 @@ class _BaseJsonEncoderTest:
 
         # std json does not escape '/'
         self.encoder_test('/\\"\n\r\t\b\f', '"\/\\\\\\"\\n\\r\\t\\b\\f"', True, False)
+
+        # HTML special chars are encoded to Unicode sequences by us, but not std json
+        self.encoder_test('<a href="test?a&b">', r'"\u003ca href=\"test?a\u0026b\"\u003e"',
+                          matches_default_encoder=False)
 
         # once a bug was introduced in the c version which passed all other tests but not
         # this one (for characted \u0638) - so need to keep this long UTF string as a

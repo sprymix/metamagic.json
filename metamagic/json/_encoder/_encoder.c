@@ -873,7 +873,8 @@ static void encode_string (PyObject * pystr, EncodedData * encodedData)
     {
         const Py_UNICODE c = input_unicode[i];
 
-        if (c >= ' ' && c <= '~' && c != '"' && c != '/' && c != '\\')
+        if (c >= ' ' && c <= '~' && c != '"' && c != '/' && c != '\\'
+                     && c != '<' && c != '>' && c != '&')
             encoder_data_append_ch_nocheck(encodedData, c);
         else
             encode_special_char(encodedData, c);
@@ -899,7 +900,7 @@ static void encode_json (PyObject * pystr, EncodedData * encodedData)
     {
         const Py_UNICODE c = input_unicode[i];
 
-        if (c >= ' ' && c <= '~')
+        if (c >= ' ' && c <= '~' && c != '<' && c != '>' && c != '&')
             encoder_data_append_ch_nocheck(encodedData, c);
         else
             encode_special_char(encodedData, c);
