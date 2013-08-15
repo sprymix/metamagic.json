@@ -214,26 +214,48 @@ class _BaseJsonEncoderTest:
         self.encoder_test(dt2, '"1990-12-11T01:01:01"',        False, False)
         self.encoder_test(dt3, '"2222-01-06T22:59:00.099999"', False, False)
 
-        class GMT5(tzinfo):
-            def utcoffset(self,dt):
-                return timedelta(hours=5,minutes=30)
-            def tzname(self,dt):
-                return "GMT +5"
-            def dst(self,dt):
-                return timedelta(0)
-
-        gmt5 = GMT5()
-        dt3 = datetime(2012,2,1,12,20,22,100,gmt5)
-        self.encoder_test(dt3, '"2012-02-01T12:20:22.000100+05:30"', False, False)
-
         dt = date(2012, 6, 1)
         self.encoder_test(dt, '"2012-06-01"', False, False)
 
         tm = time(12, 13, 14, 15)
         self.encoder_test(tm, '"12:13:14.000015"', False, False)
 
-        tm5 = time(12, 13, 14, 15, gmt5)
-        self.encoder_test(tm5, '"12:13:14.000015+05:30"', False, False)
+        # Marquesas Islands Time, UTC-09:30
+        class MART(tzinfo):
+            def utcoffset(self, dt):
+                return timedelta(days=-1, seconds=(14 * 60 + 30) * 60)
+
+            def tzname(self, dt):
+                return "UTC-09:30"
+
+            def dst(self, dt):
+                return timedelta(0)
+
+        mart = MART()
+        dt3 = datetime(2012, 2, 1, 12, 20, 22, 100, mart)
+        self.encoder_test(dt3, '"2012-02-01T12:20:22.000100-09:30"', False, False)
+
+        tm5 = time(12, 13, 14, 15, mart)
+        self.encoder_test(tm5, '"12:13:14.000015-09:30"', False, False)
+
+        # Afghanistan Time, UTC+04:30
+        class AFT(tzinfo):
+            def utcoffset(self, dt):
+                return timedelta(days=0, seconds=(4 * 60 + 30) * 60)
+
+            def tzname(self, dt):
+                return "UTC+04:30"
+
+            def dst(self, dt):
+                return timedelta(0)
+
+        aft = AFT()
+        dt3 = datetime(2012, 2, 1, 12, 20, 22, 100, aft)
+        self.encoder_test(dt3, '"2012-02-01T12:20:22.000100+04:30"', False, False)
+
+        tm5 = time(12, 13, 14, 15, aft)
+        self.encoder_test(tm5, '"12:13:14.000015+04:30"', False, False)
+
 
     def test_utils_json_encoder_special_ch(self):
         self.encoder_test('\x1b', '"\\u001b"')

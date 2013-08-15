@@ -663,6 +663,7 @@ static void encode_uuid (PyObject * obj, EncodedData * encodedData)
 #define GET_TD_DAYS(o)          (((PyDateTime_Delta *)(o))->days)
 #define GET_TD_SECONDS(o)       (((PyDateTime_Delta *)(o))->seconds)
 #define GET_TD_MICROSECONDS(o)  (((PyDateTime_Delta *)(o))->microseconds)
+#define GET_TD_TOTAL_SECONDS(o) ((GET_TD_DAYS(o) * 86400) + GET_TD_SECONDS(o))
 
 /*
  * 'obj' is assumed to be based on datetime.datetime.
@@ -703,16 +704,21 @@ static void encode_datetime (PyObject * obj, EncodedData * encodedData)
 
         if (timedelta != NULL)
         {
-            // tzinfo's timedelta can't be more than a day and is usually with a minute
-            // precision, so getting only seconds and ignoring days & microseconds is ok
-            int tz_total_seconds = GET_TD_SECONDS(timedelta);
+            int tz_total_seconds = GET_TD_TOTAL_SECONDS(timedelta);
 
             Py_DECREF(timedelta);
+
+            if (tz_total_seconds >= 0) {
+                encoder_data_append_ch_nocheck(encodedData,'+');
+            } else {
+                encoder_data_append_ch_nocheck(encodedData,'-');
+            }
+
+            tz_total_seconds = abs(tz_total_seconds);
 
             int tz_hour   = tz_total_seconds/3600;
             int tz_minute = (tz_total_seconds%3600)/60;
 
-            encoder_data_append_ch_nocheck(encodedData,'+');
             datevalue_to_string(tz_hour, encodedData, 2);
             encoder_data_append_ch_nocheck(encodedData,':');
             datevalue_to_string(tz_minute, encodedData, 2);
@@ -782,16 +788,21 @@ static void encode_time (PyObject * obj, EncodedData * encodedData)
 
         if (timedelta != NULL)
         {
-            // tzinfo's timedelta can't be more than a day and is usually with a minute
-            // precision, so getting only seconds and ignoring days & microseconds is ok
-            int tz_total_seconds = GET_TD_SECONDS(timedelta);
+            int tz_total_seconds = GET_TD_TOTAL_SECONDS(timedelta);
 
             Py_DECREF(timedelta);
+
+            if (tz_total_seconds >= 0) {
+                encoder_data_append_ch_nocheck(encodedData,'+');
+            } else {
+                encoder_data_append_ch_nocheck(encodedData,'-');
+            }
+
+            tz_total_seconds = abs(tz_total_seconds);
 
             int tz_hour   = tz_total_seconds/3600;
             int tz_minute = (tz_total_seconds%3600)/60;
 
-            encoder_data_append_ch_nocheck(encodedData,'+');
             datevalue_to_string(tz_hour, encodedData, 2);
             encoder_data_append_ch_nocheck(encodedData,':');
             datevalue_to_string(tz_minute, encodedData, 2);
