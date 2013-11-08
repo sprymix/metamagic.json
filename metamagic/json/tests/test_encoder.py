@@ -6,7 +6,13 @@
 ##
 
 
-import py.test
+try:
+    from metamagic.test import skipif
+except ImportError:
+    from pytest import mark
+    def skipif(cond):
+        assert cond in (True, False)
+        return mark.skipif(repr(cond))
 
 from json import loads as std_loads, dumps as std_dumps
 from decimal import Decimal
@@ -428,14 +434,14 @@ class TestPyJsonEncoder(_BaseJsonEncoderTest):
     encoder = PyEncoder
 
 
-SKIPC = 'False'
+SKIPC = False
 CEncoder = PyEncoder
 try:
     from .._encoder import Encoder as CEncoder
 except ImportError:
-    SKIPC = 'True'
+    SKIPC = True
 
-@py.test.mark.skipif(SKIPC)
+@skipif(SKIPC)
 class TestCJsonEncoder(_BaseJsonEncoderTest):
     encoder = CEncoder
 
