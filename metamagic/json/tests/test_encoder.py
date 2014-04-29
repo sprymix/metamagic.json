@@ -61,7 +61,7 @@ class _BaseJsonEncoderTest:
             #  separators) - ow lists are expected with extra spaces between items
             assert std_dumps(obj, separators=(',',':')) == self.dumps(obj)
 
-    def test_utils_json_encoder_literals(self):
+    def test_json_encoder_literals(self):
         self.encoder_test(None,  'null')
 
         self.encoder_test(True,  'true')
@@ -91,7 +91,7 @@ class _BaseJsonEncoderTest:
         long_utf_string = "عالم " * 50
         assert std_dumps(long_utf_string, separators=(',',':')) == self.dumps(long_utf_string)
 
-    def test_utils_json_encoder_numbers(self):
+    def test_json_encoder_numbers(self):
         self.encoder_test(0, '0')
         self.encoder_test(1, '1')
         self.encoder_test(-123456, '-123456')
@@ -124,7 +124,7 @@ class _BaseJsonEncoderTest:
         with assert_raises(TypeError, error_re='not JSON serializable'):
             self.encoder_test(1+2j, None)
 
-    def test_utils_json_encoder_lists(self):
+    def test_json_encoder_lists(self):
         self.encoder_test([],                '[]')
         self.encoder_test(['abc',True],      '["abc",true]')
         self.encoder_test(['abc',[],[True]], '["abc",[],[true]]')
@@ -163,7 +163,7 @@ class _BaseJsonEncoderTest:
         with assert_raises(TypeError, error_re='not JSON serializable'):
             self.encoder_test(bytearray([1,2,3]), '[1,2,3]', False, False)
 
-    def test_utils_json_encoder_dict(self):
+    def test_json_encoder_dict(self):
         self.encoder_test({}, '{}')
         self.encoder_test({'foo':1, 'bar':2}, ('{"foo":1,"bar":2}', '{"bar":2,"foo":1}'))
         self.encoder_test({'foo':[1,2], 'bar':[3,4]}, ('{"foo":[1,2],"bar":[3,4]}',
@@ -193,7 +193,7 @@ class _BaseJsonEncoderTest:
         self.encoder_test(DerivedDict({'foo':1, 'bar':2}), ('{"foo":1,"bar":2}',
                                                             '{"bar":2,"foo":1}'))
 
-    def test_utils_json_encoder_uuid(self):
+    def test_json_encoder_uuid(self):
         # std encodencoderer does not support UUIDs
         self.encoder_test(UUID('{12345678-1234-5678-1234-567812345678}'),
                          '"12345678-1234-5678-1234-567812345678"',
@@ -210,7 +210,7 @@ class _BaseJsonEncoderTest:
                          '{"12345678-1234-5678-1234-567812345678":1}',
                          False, False)
 
-    def test_utils_json_encoder_datetime(self):
+    def test_json_encoder_datetime(self):
         dt1 = datetime(2012,2,1,12,20,22,100)
         dt2 = datetime(1990,12,11,1,1,1,0)
         dt3 = datetime(2222,1,6,22,59,0,99999)
@@ -263,10 +263,10 @@ class _BaseJsonEncoderTest:
         self.encoder_test(tm5, '"12:13:14.000015+04:30"', False, False)
 
 
-    def test_utils_json_encoder_special_ch(self):
+    def test_json_encoder_special_ch(self):
         self.encoder_test('\x1b', '"\\u001b"')
 
-    def test_utils_json_encoder_custom_methods(self):
+    def test_json_encoder_custom_methods(self):
         class FooJson:
             def __mm_json__(self):
                 return '{"foo":{"baz":"©","spam":"\x1b"}}'
@@ -323,7 +323,7 @@ class _BaseJsonEncoderTest:
         with assert_raises(ZeroDivisionError):
             self.dumps({Spam(): 1})
 
-    def test_utils_json_default(self):
+    def test_json_default(self):
         class Foo:
             pass
 
@@ -352,7 +352,7 @@ class _BaseJsonEncoderTest:
         with assert_raises(ZeroDivisionError):
             Encoder().dumpb({Spam(): 1})
 
-    def test_utils_json_c_reftest(self):
+    def test_json_c_reftest(self):
         # test for leaked references
         big_list = []
         for _ in range(256):
@@ -366,12 +366,12 @@ class _BaseJsonEncoderTest:
             big_list2.append(str(random.random()*100000))
         self.dumps(big_list2)
 
-    def test_utils_json_integer_output(self):
+    def test_json_integer_output(self):
         for _ in range(5000):
             x = random.randint(-9007199254740992, 9007199254740992)
             assert std_dumps(x) == self.dumps(x)
 
-    def test_utils_json_abc_sequence(self):
+    def test_json_abc_sequence(self):
         class seq(Sequence):
             len = 10
             def __getitem__(self, idx):
@@ -383,7 +383,7 @@ class _BaseJsonEncoderTest:
 
         assert self.dumps(seq()) == '[0,1,4,9,16,25,36,49,64,81]'
 
-    def test_utils_json_abc_mapping(self):
+    def test_json_abc_mapping(self):
         class map(Mapping):
             data = OrderedDict((('a', 'b'), ('c', 'd'), ('e', 'f')))
             def __getitem__(self, key):
@@ -395,7 +395,7 @@ class _BaseJsonEncoderTest:
 
         assert self.dumps(map()) == self.dumps(map.data)
 
-    def test_utils_json_abc_set(self):
+    def test_json_abc_set(self):
         class set(Set):
             items = [100, 20, 42]
             def __contains__(self, el):
@@ -407,7 +407,7 @@ class _BaseJsonEncoderTest:
 
         assert self.dumps(set()) == self.dumps(set.items)
 
-    def test_utils_json_hook(self):
+    def test_json_hook(self):
         class Spam:
             pass
 
@@ -446,7 +446,7 @@ class TestCJsonEncoder(_BaseJsonEncoderTest):
     encoder = CEncoder
 
 
-def test_utils_json_dump():
+def test_json_dump():
     #test bindings
     from metamagic.json import dumps, dumpb
 
