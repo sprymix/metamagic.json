@@ -6,10 +6,16 @@
 ##
 
 
+__all__ = ('dumps', 'dumpb', 'loads', 'loadb')
+
+
 try:
     from ._encoder import Encoder
 except ImportError:
     from .encoder import Encoder
+
+
+import json as std_json
 
 
 def dumps(obj, encoder=Encoder):
@@ -78,3 +84,14 @@ def dumpb(obj, encoder=Encoder):
            b'true'
     '''
     return Encoder().dumpb(obj)
+
+
+def loads(s):
+    """Deserialize ``s`` (instance of ``str``) to a Python object."""
+    return std_json.loads(s)
+
+
+def loadb(b):
+    """Deserialize ``b`` (instance of ``bytes``) to a Python object."""
+    assert isinstance(b, (bytes, bytearray))
+    return std_json.loads(b.decode('utf-8'))
