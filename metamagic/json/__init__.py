@@ -19,9 +19,10 @@ import json as std_json
 
 
 def dumps(obj, encoder=Encoder):
-    '''Returns a JSON representation of ``obj`` in a Python string.
+    """Return a JSON representation of ``obj`` in a Python string.
 
-       Uses the given Encoder class which is supposed to have a ``dumps`` method.
+       Uses the given Encoder class which is supposed to have a ``dumps``
+       method.
 
        By default tries to use the C version of the Encoder class from the
        ``_encoder`` module. If there is no C version uses the Python version
@@ -39,7 +40,8 @@ def dumps(obj, encoder=Encoder):
            >>> dumps('foo')
            '"foo"'
 
-       Using custom ``__mm_serialize__`` (see the Encoder class docs for more info):
+       Using custom ``__mm_serialize__`` (see the Encoder class docs for more
+       info):
 
        .. code-block:: pycon
 
@@ -62,13 +64,15 @@ def dumps(obj, encoder=Encoder):
 
            >>> MyEncoder().dumps([1])
            '["*1"]'
-    '''
+    """
     return Encoder().dumps(obj)
 
-def dumpb(obj, encoder=Encoder):
-    '''Returns a JSON representation of ``obj`` in a bytes() array.
 
-       Uses the given Encoder class which is supposed to have a ``dumpb`` method.
+def dumpb(obj, encoder=Encoder):
+    """Return a JSON representation of ``obj`` in a bytes() array.
+
+       Uses the given Encoder class which is supposed to have a ``dumpb``
+       method.
 
        By default tries to use the C version of the Encoder class from the
        ``_encoder`` module. If there is no C version uses the Python version
@@ -82,7 +86,7 @@ def dumpb(obj, encoder=Encoder):
 
            >>> dumpb(True)
            b'true'
-    '''
+    """
     return Encoder().dumpb(obj)
 
 
