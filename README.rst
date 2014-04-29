@@ -1,7 +1,7 @@
 metamagic.json
 ==============
 
-An ultra-fast Python implementation of a JSON encoder for Python objects designed
+An ultra-fast Python 3 implementation of a JSON encoder for Python objects designed
 to be compatible with native JSON decoders in various web browsers.
 
 Can either encode to a python string (see ``dumps``) or a sequence
@@ -30,9 +30,6 @@ method. If ``Encoder.default`` succeeds, the output is again encoded as any othe
 
 In case there is a need to custom-handle natively supported primitive types, an
 ``Encoder.encode_hook`` method exists.
-
-
-**Python 3.3 only!**
 
 
 Examples

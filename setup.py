@@ -40,7 +40,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: C',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3'
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4'
     ],
     packages=[
         'metamagic.json',
