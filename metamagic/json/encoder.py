@@ -183,7 +183,7 @@ class Encoder:
 
         # strict checks first - for speed
         if obj.__class__ is int:
-            if abs(obj)>JAVASCRIPT_MAXINT:
+            if abs(obj) > JAVASCRIPT_MAXINT:
                 raise ValueError('Number out of range: {!r}'.format(obj))
             return str(obj)
 
@@ -194,13 +194,14 @@ class Encoder:
                 raise ValueError('Infinity is not supported')
             return repr(obj)
 
-        # more in-depth class analysys last
-        if isinstance(obj,int):
-            if abs(obj)>JAVASCRIPT_MAXINT:
+        # more in-depth class analysis last
+        if isinstance(obj, int):
+            obj = int(obj)
+            if abs(obj) > JAVASCRIPT_MAXINT:
                 raise ValueError('Number out of range: {!r}'.format(obj))
             return str(obj)
 
-        if isinstance(obj,float):
+        if isinstance(obj, float):
             if isnan(obj):
                 raise ValueError('NaN is not supported')
             if isinf(obj):

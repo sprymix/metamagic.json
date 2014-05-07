@@ -18,8 +18,10 @@ from json import loads as std_loads, dumps as std_dumps
 from decimal import Decimal
 from collections import OrderedDict, Set, Sequence, Mapping
 from uuid import UUID
-import random
 from datetime import datetime, tzinfo, timedelta, date, time
+
+import functools
+import random
 
 from metamagic.utils.debug import assert_raises
 
@@ -426,6 +428,19 @@ class _BaseJsonEncoderTest:
 
         with assert_raises(ZeroDivisionError):
             Encoder().dumps([Spam()])
+
+    def test_json_encode_int_cast(self):
+        @functools.total_ordering
+        class MyInt(int):
+            def __abs__(self): return self
+            def __lt__(self, other): 1/0
+            def __eq__(self, other): 1/0
+            def __gt__(self, other): 1/0
+            def __ne__(self, other): 1/0
+            def __ge__(self, other): 1/0
+            def __le__(self, other): 1/0
+
+        assert self.dumps([MyInt(10)]) == '[10]'
 
 
 from ..encoder import Encoder as PyEncoder
