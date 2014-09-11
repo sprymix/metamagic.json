@@ -48,7 +48,8 @@ class _BaseJsonEncoderTest:
                 expected = set(expected)
 
         encoded = self.dumps(obj)
-        assert encoded in expected
+        assert encoded in expected, \
+               'encoded {} not in expected {}'.format(encoded, expected)
 
         expected_b = {e.encode('ascii') for e in expected}
         encoded_b = self.dumpb(obj)
@@ -80,8 +81,7 @@ class _BaseJsonEncoderTest:
 
         self.encoder_test('\x00a\nbcعمان', '"\\u0000a\\nbc\\u0639\\u0645\\u0627\\u0646"')
 
-        # std json does not escape '/'
-        self.encoder_test('/\\"\n\r\t\b\f', '"\/\\\\\\"\\n\\r\\t\\b\\f"', True, False)
+        self.encoder_test('/\\"\n\r\t\b\f', '"/\\\\\\"\\n\\r\\t\\b\\f"')
 
         # HTML special chars are encoded to Unicode sequences by us, but not std json
         self.encoder_test('<a href="test?a&b">', r'"\u003ca href=\"test?a\u0026b\"\u003e"',
@@ -92,6 +92,8 @@ class _BaseJsonEncoderTest:
         # "more complicated" utf sample
         long_utf_string = "عالم " * 50
         assert std_dumps(long_utf_string, separators=(',',':')) == self.dumps(long_utf_string)
+
+        self.encoder_test('a/b', '"a/b"')
 
     def test_json_encoder_numbers(self):
         self.encoder_test(0, '0')

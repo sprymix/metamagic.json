@@ -18,15 +18,14 @@ from datetime import date, time
 
 JAVASCRIPT_MAXINT = 9007199254740992  # see http://ecma262-5.com/ELS5_HTML.htm#Section_8.5
 
-BASE_ESCAPE_ASCII = re_compile(r'([\\/]|[^\ -~]|[<>&])')
-ESCAPE_ASCII = re_compile(r'([\\"/]|[^\ -~]|[<>&])')
+BASE_ESCAPE_ASCII = re_compile(r'([\\]|[^\ -~]|[<>&])')
+ESCAPE_ASCII = re_compile(r'([\\"]|[^\ -~]|[<>&])')
 
 BASE_ESCAPE_DCT = {}
 for i in range(0x20):
     BASE_ESCAPE_DCT[chr(i)]= '\\u{0:04x}'.format(i)
 BASE_ESCAPE_DCT.update({
     '\\': '\\\\',
-    '/':  '\/',
     '\b': '\\b',
     '\f': '\\f',
     '\n': '\\n',

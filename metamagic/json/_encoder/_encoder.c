@@ -841,7 +841,6 @@ static void encode_special_char (EncodedData * encodedData, Py_UNICODE c)
         case '\n': encoder_data_append_ch_nocheck(encodedData, 'n');  break;
         case '\r': encoder_data_append_ch_nocheck(encodedData, 'r');  break;
         case '\t': encoder_data_append_ch_nocheck(encodedData, 't');  break;
-        case '/':  encoder_data_append_ch_nocheck(encodedData, '/'); break;
         default:
             #ifdef Py_UNICODE_WIDE
             if (c >= 0x10000) {
@@ -884,7 +883,7 @@ static void encode_string (PyObject * pystr, EncodedData * encodedData)
     {
         const Py_UNICODE c = input_unicode[i];
 
-        if (c >= ' ' && c <= '~' && c != '"' && c != '/' && c != '\\'
+        if (c >= ' ' && c <= '~' && c != '"' && c != '\\'
                      && c != '<' && c != '>' && c != '&')
             encoder_data_append_ch_nocheck(encodedData, c);
         else
