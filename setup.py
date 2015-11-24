@@ -31,7 +31,7 @@ setup(
     ext_modules=[
         Extension('metamagic.json._encoder',
                   sources=['metamagic/json/_encoder/_encoder.c'],
-                  extra_compile_args=['-O3', '-std=gnu99'])
+                  extra_compile_args=['-O3', '-Wno-error=declaration-after-statement'])
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
