@@ -19,11 +19,11 @@ readme = open('README.rst').read()
 
 setup(
     name='metamagic.json',
-    version='0.9.5',
+    version='0.9.6',
     description='Fast JSON encoder',
     long_description=readme,
-    maintainer='Sprymix Inc.',
-    maintainer_email='info@sprymix.com',
+    maintainer='MagicStack Inc.',
+    maintainer_email='hello@magic.io',
     license='BSD',
     url='http://github.com/sprymix/metamagic.json',
     platforms=['any'],

@@ -1,3 +1,11 @@
+metamagic.json 0.9.6
+--------------------
+
+Changes:
+
+ * Fix a memory leak in the C implementation of mapping encoder.
+
+
 metamagic.json 0.9.5
 --------------------
 
