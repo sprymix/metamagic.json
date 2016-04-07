@@ -24,7 +24,7 @@ static bool _encoder_buffer_allocate (EncodedData * data, Py_ssize_t size)
 {
     //printf(" [Buffer: %lld chars] ",(long long)size); fflush(stdout);
 
-    data->buffer      = (BUFFERTYPE*) malloc (size);
+    data->buffer      = (BUFFERTYPE*) PyMem_Malloc (size);
 
     if (data->buffer == NULL)
     {
@@ -53,7 +53,7 @@ static bool _encoder_buffer_grow (EncodedData * data, Py_ssize_t new_size)
     if (old_buffer != NULL)
     {
         memcpy(data->buffer, old_buffer, old_buffer_size);
-        free(old_buffer);
+        PyMem_Free(old_buffer);
         data->buffer_free = data->buffer + (old_buffer_free - old_buffer);
     }
 
@@ -62,7 +62,7 @@ static bool _encoder_buffer_grow (EncodedData * data, Py_ssize_t new_size)
 
 static void encoder_data_destruct (EncodedData * data)
 {
-    free(data->buffer);
+    PyMem_Free(data->buffer);
 }
 
 static Py_ssize_t encoder_data_get_size (EncodedData * data)
