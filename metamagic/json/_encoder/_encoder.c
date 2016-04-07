@@ -1003,12 +1003,10 @@ static void encode_list (PyObject * obj, EncodedData * encodedData)
 {
     inc_depth(encodedData);
 
-    Py_ssize_t list_size = PyList_GET_SIZE(obj);
-
     encoder_data_append_char(encodedData, '[');
 
     Py_ssize_t i;
-    for (i = 0; i < list_size; i++)
+    for (i = 0; i < PyList_GET_SIZE(obj); i++)
     {
         if (i!=0) encoder_data_append_char(encodedData, ',');
 
@@ -1024,12 +1022,10 @@ static void encode_tuple (PyObject * obj, EncodedData * encodedData)
 {
     inc_depth(encodedData);
 
-    Py_ssize_t tuple_size = PyTuple_Size(obj);
-
     encoder_data_append_char(encodedData, '[');
 
     Py_ssize_t i;
-    for (i = 0; i < tuple_size; i++)
+    for (i = 0; i < PyTuple_GET_SIZE(obj); i++)
     {
         if (i!=0) encoder_data_append_char(encodedData, ',');
 
