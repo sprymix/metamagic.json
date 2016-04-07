@@ -1133,13 +1133,18 @@ static void encode_mapping (PyObject * obj, EncodedData * encodedData)
 
         value = PyObject_GetItem(obj, key);
 
-        if (value==NULL) printf("err\n");
+        if (value==NULL) {
+            Py_DECREF(key);
+            encoder_data_set_error(encodedData);
+            return;
+        }
 
         encode(value, encodedData);
 
-        if (encoder_data_has_error(encodedData)) return;
-
         Py_DECREF(key);
+        Py_DECREF(value);
+
+        if (encoder_data_has_error(encodedData)) return;
     }
     Py_DECREF(it);
 
