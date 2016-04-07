@@ -1127,7 +1127,7 @@ static void encode_mapping (PyObject * obj, EncodedData * encodedData)
 
         encode_key(key, encodedData);
 
-        if (encoder_data_has_error(encodedData)) return;
+        if (encoder_data_has_error(encodedData)) goto done;
 
         encoder_data_append_char(encodedData, ':');
 
@@ -1136,7 +1136,7 @@ static void encode_mapping (PyObject * obj, EncodedData * encodedData)
         if (value==NULL) {
             Py_DECREF(key);
             encoder_data_set_error(encodedData);
-            return;
+            goto done;
         }
 
         encode(value, encodedData);
@@ -1144,11 +1144,13 @@ static void encode_mapping (PyObject * obj, EncodedData * encodedData)
         Py_DECREF(key);
         Py_DECREF(value);
 
-        if (encoder_data_has_error(encodedData)) return;
+        if (encoder_data_has_error(encodedData)) goto done;
     }
-    Py_DECREF(it);
 
     encoder_data_append_char(encodedData, '}');
 
     dec_depth(encodedData);
+
+  done:
+    Py_DECREF(it);
 }
