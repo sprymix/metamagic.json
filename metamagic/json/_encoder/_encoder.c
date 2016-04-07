@@ -326,7 +326,7 @@ static void encode (PyObject *obj, EncodedData * encodedData)
         {
             PyObject* obj_encoded = PyObject_CallFunctionObjArgs(_encode_hook_, obj, NULL);
 
-            if (PyErr_Occurred())
+            if (obj_encoded == NULL)
                 encoder_data_set_error(encodedData);
             else
             {
@@ -375,7 +375,7 @@ static void _encode (PyObject * obj, EncodedData * encodedData)
         PyObject* obj_encoded = PyObject_CallObject(_sx_json_, NULL);
         int implemented = 1;
 
-        if (PyErr_Occurred())
+        if (obj_encoded == NULL)
         {
             if (PyErr_ExceptionMatches(PyExc_NotImplementedError))
             {
@@ -411,7 +411,7 @@ static void _encode (PyObject * obj, EncodedData * encodedData)
         PyObject* obj_encoded = PyObject_CallObject(_sx_serialize_, NULL);
         int implemented = 1;
 
-        if (PyErr_Occurred())
+        if (obj_encoded == NULL)
             if (PyErr_ExceptionMatches(PyExc_NotImplementedError))
             {
                 PyErr_Clear();
@@ -500,7 +500,7 @@ static void encode_key (PyObject *obj, EncodedData * encodedData)
         PyObject* obj_encoded = PyObject_CallObject(_sx_serialize_, NULL);
         int implemented = 1;
 
-        if (PyErr_Occurred())
+        if (obj_encoded == NULL)
             if (PyErr_ExceptionMatches(PyExc_NotImplementedError))
             {
                 PyErr_Clear();
@@ -555,7 +555,7 @@ static void encode_default (PyObject * obj, EncodedData * encodedData)
     {
         PyObject* obj_encoded = PyObject_CallFunctionObjArgs(default_method, obj, NULL);
 
-        if (!PyErr_Occurred())
+        if (obj_encoded != NULL)
         {
             encode(obj_encoded, encodedData);
             Py_DECREF(obj_encoded);
@@ -639,7 +639,7 @@ static void encode_decimal (PyObject * obj, EncodedData * encodedData)
 {
     PyObject * str_repr = PyObject_Str(obj);
 
-    if (PyErr_Occurred()) return encoder_not_serializable(obj, encodedData);
+    if (str_repr == NULL) return encoder_not_serializable(obj, encodedData);
 
     encode_string(str_repr, encodedData);
 
@@ -650,7 +650,7 @@ static void encode_uuid (PyObject * obj, EncodedData * encodedData)
 {
     PyObject * str_repr = PyObject_Str(obj);
 
-    if (PyErr_Occurred()) return encoder_not_serializable(obj, encodedData);
+    if (str_repr == NULL) return encoder_not_serializable(obj, encodedData);
 
     encode_string(str_repr, encodedData);
 
