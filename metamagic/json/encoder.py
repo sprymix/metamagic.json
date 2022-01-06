@@ -11,7 +11,8 @@ from re import compile as re_compile
 from numbers import Number
 from decimal import Decimal
 from math import isnan, isinf
-from collections import OrderedDict, Set, Sequence, Mapping
+from collections import OrderedDict
+from collections.abc import Set, Sequence, Mapping
 from uuid import UUID
 from datetime import date, time
 

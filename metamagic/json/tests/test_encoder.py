@@ -16,7 +16,8 @@ except ImportError:
 
 from json import loads as std_loads, dumps as std_dumps
 from decimal import Decimal
-from collections import OrderedDict, Set, Sequence, Mapping
+from collections import OrderedDict
+from collections.abc import Set, Sequence, Mapping
 from uuid import UUID
 from datetime import datetime, tzinfo, timedelta, date, time
 
